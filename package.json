@@ -1,7 +1,10 @@
 {
-  "name": "my-app",
+  "name": "giphy-app",
   "version": "0.1.0",
   "private": true,
+  "repository": "git@github.com/NancyBolstad/giphy-app",
+  "author": "Nancy Bolstad <litchacha@gmail.com>",
+  "license": "MIT",
   "dependencies": {
     "@types/jest": "24.0.18",
     "@types/node": "12.7.11",
