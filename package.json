@@ -2,7 +2,7 @@
   "name": "giphy-app",
   "version": "0.1.0",
   "private": true,
-  "repository": "git@github.com/NancyBolstad/giphy-app",
+  "repository": "git@github.com/NancyBolstad/react-typescript-starter",
   "author": "Nancy Bolstad <litchacha@gmail.com>",
   "license": "MIT",
   "dependencies": {
