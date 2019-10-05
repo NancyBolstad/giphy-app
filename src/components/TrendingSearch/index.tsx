@@ -8,6 +8,7 @@ interface ITrendingSearchProps {}
 const ResultWrapper = styled.div``;
 
 const Result = styled.li`
+  list-style-type: none;
   &:not(:last-child) {
     border-bottom: 1px solid rgba(0, 0, 0, 0.12);
     padding-bottom: 20px;
@@ -54,7 +55,6 @@ export const TrendingSearch: React.FunctionComponent<ITrendingSearchProps> = ({}
     const result: Root = await (await fetch(url)).json();
 
     if (Array.isArray(result.data) && result.data.length > 0) {
-      console.log(1111111);
       setSearchResult(result.data);
     } else {
       setSearchResult([]);
@@ -70,7 +70,7 @@ export const TrendingSearch: React.FunctionComponent<ITrendingSearchProps> = ({}
           <Result key={element.id}>
             <ResultBody>
               <ResultInfo>
-                <Gif src={element.images.original.url}></Gif>>
+                <Gif src={element.images.original.url} alt={element.title}></Gif>
               </ResultInfo>
             </ResultBody>
           </Result>

@@ -6,7 +6,10 @@ import { TrendingSearch } from '../TrendingSearch';
 
 interface ISearchProps {}
 
-const SearchSectionWrapper = styled.div``;
+const SearchSectionWrapper = styled.div`
+  background-color: black;
+  color: white;
+`;
 
 const GeoSearchWrapper = styled.div`
   display: flex;
@@ -14,13 +17,9 @@ const GeoSearchWrapper = styled.div`
   background-color: white;
 `;
 
-interface SearchFormWrapper {
-  border?: boolean;
-}
-
-const SearchFormWrapper = styled.div<SearchFormWrapper>`
-background-color: white;
-  border: 2px solid transparent;
+const SearchFormWrapper = styled.div`
+  background-color: black;
+  border: 2px solid yellow;
 
   form {
     display: flex;
@@ -29,27 +28,30 @@ background-color: white;
     position: relative;
     padding: 1rem;
   }
+
   button[type='submit'] {
     cursor: pointer;
     height: 3rem;
-    background-color: white;
+    background-color: green;
     color: #777777;
     border: none;
     position: absolute;
     right: 12px;
     top: 16px;
   }
+
   input[type='text'] {
     border: none;
     border-bottom: 2px solid #777777;
-    background-color: green
-    color: #454545;
+    background-color: black;
+    color: yellow;
     display: block;
     flex: 1;
     height: 1.8em;
     padding-right: 50px;
+
     ::placeholder {
-      color: black;
+      color: yellow;
     }
   }
   input[type='text']:focus,
@@ -61,7 +63,6 @@ background-color: white;
 const ResultWrapper = styled.ul`
   max-height: 500px;
   overflow-y: auto;
-  background-color: white;
   padding: 30px;
   margin: 2px 0 0;
   list-style: none;
@@ -155,7 +156,7 @@ export const GiphySearch: React.FunctionComponent<ISearchProps> = () => {
               id="searchForm"
               className="searchInput"
               type="text"
-              placeholder="Skriv inn sted"
+              placeholder="Search her"
               value={searchValue}
               onChange={(e: any) => {
                 setSearchValue(e.target.value);
@@ -172,13 +173,13 @@ export const GiphySearch: React.FunctionComponent<ISearchProps> = () => {
         <ResultWrapper>
           {isLoading && <Status>Laster…</Status>}
           {didntFind && <Status>{`Fant ingen ${searchValue}!`}</Status>}
-          {!didntFind && <Status>{`Fant ${amount}!`}</Status>}
+          {!didntFind && <Status>{`Fant ${amount} for ${searchValue}!`}</Status>}
           {searchResult &&
             searchResult.map(element => (
               <Result key={element.id}>
                 <ResultBody>
                   <ResultInfo>
-                    <Gif src={element.images.original.url}></Gif>>
+                    <Gif src={element.images.original.url} alt={element.title}></Gif>
                   </ResultInfo>
                 </ResultBody>
               </Result>
