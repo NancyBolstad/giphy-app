@@ -1,5 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
+import Columned from 'react-columned';
 import { GIPHY_API_KEY } from '../../util/constants';
 import { Root, GifObj } from '../../types/apiData';
 import { TrendingSearch } from '../TrendingSearch';
@@ -7,56 +8,57 @@ import { TrendingSearch } from '../TrendingSearch';
 interface ISearchProps {}
 
 const SearchSectionWrapper = styled.div`
+  display: flex;
   background-color: black;
   color: white;
+  flex-direction: column;
+  width: 75vw;
+  margin: 0 auto;
 `;
 
 const GeoSearchWrapper = styled.div`
   display: flex;
   flex-direction: column;
   background-color: white;
+  background-color: black;
+  padding-top: 3rem;
+  padding-bottom: 3rem;
 `;
 
 const SearchFormWrapper = styled.div`
-  background-color: black;
-  border: 2px solid yellow;
-
+  margin: 0 auto;
   form {
     display: flex;
-    margin: 0;
-    padding: 0;
-    position: relative;
-    padding: 1rem;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    margin-bottom: 15px;
   }
 
   button[type='submit'] {
-    cursor: pointer;
-    height: 3rem;
-    background-color: green;
-    color: #777777;
-    border: none;
-    position: absolute;
-    right: 12px;
-    top: 16px;
+    border: 1px solid #aaa;
+    background-color: #aaa;
+    color: #fff;
+    padding: 0 12px;
+    height: 50px;
+    width:10vw;
   }
 
   input[type='text'] {
-    border: none;
-    border-bottom: 2px solid #777777;
-    background-color: black;
-    color: yellow;
-    display: block;
-    flex: 1;
-    height: 1.8em;
-    padding-right: 50px;
-
-    ::placeholder {
-      color: yellow;
+    border: 2px solid #aaa;
+    color: #333;
+    font-size: 14px;
+    height: 40px;
+    width: 40vw;
+	max-width: 100%;
     }
   }
-  input[type='text']:focus,
+
   button[type='submit']:focus {
     outline: none;
+  }
+  button[type='submit']:active {
+    opacity: 0.7;
   }
 `;
 
@@ -72,35 +74,6 @@ const ResultWrapper = styled.ul`
   }
 `;
 
-const Result = styled.li`
-  &:not(:last-child) {
-    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
-    padding-bottom: 20px;
-  }
-`;
-
-const ResultName = styled.p`
-  margin: 0;
-`;
-
-const ResultBody = styled.div`
-  display: flex;
-  flex-direction: column;
-  @media screen and (min-width: 1000px) {
-    flex-direction: row;
-  }
-`;
-
-const ResultInfo = styled.div`
-  flex: 1;
-  p {
-    margin: 4px 0 0;
-  }
-  a {
-    color: black;
-  }
-`;
-
 const Status = styled.li`
   text-align: center;
 `;
@@ -108,6 +81,7 @@ const Status = styled.li`
 const Gif = styled.img`
   display: block;
   width: 100%;
+  margin: 0.3rem;
 `;
 
 export const GiphySearch: React.FunctionComponent<ISearchProps> = () => {
@@ -172,16 +146,13 @@ export const GiphySearch: React.FunctionComponent<ISearchProps> = () => {
           {isLoading && <Status>Laster…</Status>}
           {didntFind && <Status>{`Fant ingen ${searchValue}!`}</Status>}
           {!didntFind && <Status>{`Found ${amount} gifs`}</Status>}
-          {searchResult &&
-            searchResult.map(element => (
-              <Result key={element.id}>
-                <ResultBody>
-                  <ResultInfo>
-                    <Gif src={element.images.original.url} alt={element.title}></Gif>
-                  </ResultInfo>
-                </ResultBody>
-              </Result>
-            ))}
+          {searchResult && (
+            <Columned>
+              {searchResult.map(element => (
+                <Gif src={element.images.original.url} alt={element.title}></Gif>
+              ))}
+            </Columned>
+          )}
         </ResultWrapper>
       )}
     </SearchSectionWrapper>

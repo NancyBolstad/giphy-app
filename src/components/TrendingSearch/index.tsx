@@ -1,52 +1,18 @@
 import * as React from 'react';
 import styled from 'styled-components';
+import Columned from 'react-columned';
 import { GIPHY_API_KEY } from '../../util/constants';
 import { Root, GifObj } from '../../types/apiData';
 
 interface ITrendingSearchProps {}
 
-const ResultWrapper = styled.div``;
-
-const Result = styled.li`
-  list-style-type: none;
-  &:not(:last-child) {
-    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
-    padding-bottom: 20px;
-  }
-`;
-
-const ResultName = styled.p`
-  margin: 0;
-`;
-
-const ResultBody = styled.div`
-  display: flex;
-  flex-direction: column;
-  @media screen and (min-width: 1000px) {
-    flex-direction: row;
-  }
-`;
-
-const ResultInfo = styled.div`
-  flex: 1;
-  p {
-    margin: 4px 0 0;
-  }
-  a {
-    color: black;
-  }
-`;
-
-const Status = styled.li`
-  text-align: center;
-`;
-
 const Gif = styled.img`
   display: block;
   width: 100%;
+  margin: 0.3rem;
 `;
 
-export const TrendingSearch: React.FunctionComponent<ITrendingSearchProps> = ({}) => {
+export const TrendingSearch: React.FunctionComponent<ITrendingSearchProps> = () => {
   const [searchResult, setSearchResult] = React.useState<GifObj[]>([]);
 
   async function callApi() {
@@ -64,18 +30,12 @@ export const TrendingSearch: React.FunctionComponent<ITrendingSearchProps> = ({}
   callApi();
 
   return (
-    <ResultWrapper>
+    <Columned>
       {searchResult &&
         searchResult.map(element => (
-          <Result key={element.id}>
-            <ResultBody>
-              <ResultInfo>
-                <Gif src={element.images.original.url} alt={element.title}></Gif>
-              </ResultInfo>
-            </ResultBody>
-          </Result>
+          <Gif src={element.images.original.url} alt={element.title}></Gif>
         ))}
-    </ResultWrapper>
+    </Columned>
   );
 };
 
