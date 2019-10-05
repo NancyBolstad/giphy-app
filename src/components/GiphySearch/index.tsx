@@ -61,12 +61,10 @@ const SearchFormWrapper = styled.div`
 `;
 
 const ResultWrapper = styled.ul`
-  max-height: 500px;
-  overflow-y: auto;
   padding: 30px;
   margin: 2px 0 0;
   list-style: none;
-  box-shadow: inset 0 -14px 10px -10px #00000029;
+
   li {
     &:not(:last-child) {
       margin-bottom: 50px;
