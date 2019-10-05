@@ -1,14 +1,9 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { GIPHY_API_KEY } from '../../util/constants';
+import { Root, GifObj } from '../../types/apiData';
 
-interface ISearchProps {
-  errorBorder?: boolean;
-}
-
-export interface SearchResultInterface {
-  id: string;
-}
+interface ISearchProps {}
 
 const SearchSectionWrapper = styled.div``;
 
@@ -110,12 +105,18 @@ const Status = styled.li`
   text-align: center;
 `;
 
+const Gif = styled.img`
+  display: block;
+  width: 100%;
+`;
+
 export const GiphySearch: React.FunctionComponent<ISearchProps> = ({ errorBorder }) => {
   const [searchValue, setSearchValue] = React.useState('');
   const [isLoading, setIsLoading] = React.useState(false);
   const [hasSearched, setHasSearched] = React.useState(false);
   const [didntFind, setDidntFind] = React.useState(false);
-  const [searchResult, setSearchResult] = React.useState<SearchResultInterface[]>([]);
+  const [searchResult, setSearchResult] = React.useState<GifObj[]>([]);
+  const [amount, setAmount] = React.useState(0);
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
@@ -127,11 +128,13 @@ export const GiphySearch: React.FunctionComponent<ISearchProps> = ({ errorBorder
   };
 
   async function callApi(query: string) {
-    const url = `https://api.giphy.com/v1/gifs/search?api_key=${GIPHY_API_KEY}&q=${searchValue}&limit=25&offset=0&rating=G&lang=en
+    const url = `https://api.giphy.com/v1/gifs/search?api_key=${GIPHY_API_KEY}&q=${searchValue}&rating=G&lang=en
     `;
-    const result = await (await fetch(url)).json();
+    const result: Root = await (await fetch(url)).json();
 
     if (Array.isArray(result.data) && result.data.length > 0) {
+      console.log(1111111);
+      setAmount(result.pagination.total_count);
       setSearchResult(result.data);
     } else {
       setSearchResult([]);
@@ -166,12 +169,13 @@ export const GiphySearch: React.FunctionComponent<ISearchProps> = ({ errorBorder
         <ResultWrapper>
           {isLoading && <Status>Laster…</Status>}
           {didntFind && <Status>{`Fant ingen ${searchValue}!`}</Status>}
+          {!didntFind && <Status>{`Fant ${searchResult.length}!`}</Status>}
           {searchResult &&
             searchResult.map(element => (
               <Result key={element.id}>
                 <ResultBody>
                   <ResultInfo>
-                    <ResultName>{element.id}</ResultName>
+                    <Gif src={element.images.original.url}></Gif>>
                   </ResultInfo>
                 </ResultBody>
               </Result>

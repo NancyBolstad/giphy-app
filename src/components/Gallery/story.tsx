@@ -9,7 +9,23 @@ const mockGif = {
 };
 
 const mockIGallery = {
-  gifsArray: [mockGif, mockGif, mockGif, mockGif, mockGif],
+  gifsArray: [
+    mockGif,
+    mockGif,
+    mockGif,
+    mockGif,
+    mockGif,
+    mockGif,
+    mockGif,
+    mockGif,
+    mockGif,
+    mockGif,
+    mockGif,
+    mockGif,
+    mockGif,
+    mockGif,
+    mockGif,
+  ],
 };
 
 storiesOf('Component/Gallery', module).add('Basic usage', () => <GiphyGallery {...mockIGallery} />);
