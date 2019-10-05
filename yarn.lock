@@ -861,7 +861,7 @@
   dependencies:
     regenerator-runtime "^0.13.2"
 
-"@babel/runtime@^7.0.0", "@babel/runtime@^7.1.2", "@babel/runtime@^7.3.4", "@babel/runtime@^7.4.2", "@babel/runtime@^7.4.4", "@babel/runtime@^7.4.5", "@babel/runtime@^7.5.0", "@babel/runtime@^7.5.5":
+"@babel/runtime@^7.0.0", "@babel/runtime@^7.1.2", "@babel/runtime@^7.2.0", "@babel/runtime@^7.3.4", "@babel/runtime@^7.4.2", "@babel/runtime@^7.4.4", "@babel/runtime@^7.4.5", "@babel/runtime@^7.5.0", "@babel/runtime@^7.5.5":
   version "7.6.2"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.6.2.tgz#c3d6e41b304ef10dcf13777a33e7694ec4a9a6dd"
   integrity sha512-EXxN64agfUqqIGeEjI5dL5z0Sw0ZwWo1mLTi4mQowCZ42O59b7DRpZAnTC6OqdF28wMBMFKNb/4uFGrVaigSpg==
@@ -9824,6 +9824,14 @@ react-color@^2.17.0:
     prop-types "^15.5.10"
     reactcss "^1.2.0"
     tinycolor2 "^1.4.1"
+
+react-columned@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/react-columned/-/react-columned-1.1.2.tgz#6ffdf3c67dcab1d4ef00e9d8daaeffe11792be14"
+  integrity sha512-mHifJdI1Od4bufUByjTHCCGwYleU01OXc1cNgicN7fBBZ3pTGT1vys4CGuvV07bZQy/rSBeBv00igI7Kodjl5A==
+  dependencies:
+    "@babel/runtime" "^7.2.0"
+    element-resize-detector "^1.1.15"
 
 react-dev-utils@^9.0.0, react-dev-utils@^9.1.0:
   version "9.1.0"
