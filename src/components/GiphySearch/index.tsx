@@ -173,7 +173,7 @@ export const GiphySearch: React.FunctionComponent<ISearchProps> = () => {
         <ResultWrapper>
           {isLoading && <Status>Laster…</Status>}
           {didntFind && <Status>{`Fant ingen ${searchValue}!`}</Status>}
-          {!didntFind && <Status>{`Fant ${amount} for ${searchValue}!`}</Status>}
+          {!didntFind && <Status>{`Found ${amount} gifs`}</Status>}
           {searchResult &&
             searchResult.map(element => (
               <Result key={element.id}>
