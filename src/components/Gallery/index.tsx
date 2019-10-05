@@ -20,6 +20,13 @@ const GalleryWrapper = styled.div`
   margin-left: auto;
   margin-right: auto;
   margin-bottom: 80px;
+`;
+
+const GifWrapper = styled.div`
+  height: auto;
+  margin-top: 30px;
+  width: 98vw;
+  position: relative;
 
   @media (min-width: 768px) {
     .div:first-child {
@@ -56,13 +63,6 @@ const GalleryWrapper = styled.div`
       margin-right: 0;
     }
   }
-`;
-
-const GifWrapper = styled.div`
-  height: auto;
-  margin-top: 30px;
-  width: 98vw;
-  position: relative;
 `;
 
 const Gif = styled.img`
