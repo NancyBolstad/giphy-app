@@ -111,7 +111,7 @@ const Gif = styled.img`
   width: 100%;
 `;
 
-export const GiphySearch: React.FunctionComponent<ISearchProps> = ({ errorBorder }) => {
+export const GiphySearch: React.FunctionComponent<ISearchProps> = () => {
   const [searchValue, setSearchValue] = React.useState('');
   const [isLoading, setIsLoading] = React.useState(false);
   const [hasSearched, setHasSearched] = React.useState(false);
