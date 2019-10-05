@@ -1,9 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
+import theme from '../../util/theme';
 
 const Container = styled.button`
-  background-color: red;
-  color: white;
+  background-color: ${theme.light.searchBgColor};
+  color: ${theme.light.color};
   font-size: 2rem;
 `;
 
