@@ -2,6 +2,7 @@ import * as React from 'react';
 import styled from 'styled-components';
 import { GIPHY_API_KEY } from '../../util/constants';
 import { Root, GifObj } from '../../types/apiData';
+import { TrendingSearch } from '../TrendingSearch';
 
 interface ISearchProps {}
 
@@ -134,6 +135,7 @@ export const GiphySearch: React.FunctionComponent<ISearchProps> = ({ errorBorder
 
     if (Array.isArray(result.data) && result.data.length > 0) {
       console.log(1111111);
+      console.log(result.pagination.total_count);
       setAmount(result.pagination.total_count);
       setSearchResult(result.data);
     } else {
@@ -165,11 +167,12 @@ export const GiphySearch: React.FunctionComponent<ISearchProps> = ({ errorBorder
           </form>
         </SearchFormWrapper>
       </GeoSearchWrapper>
+      {!hasSearched && <TrendingSearch></TrendingSearch>}
       {hasSearched && (
         <ResultWrapper>
           {isLoading && <Status>Laster…</Status>}
           {didntFind && <Status>{`Fant ingen ${searchValue}!`}</Status>}
-          {!didntFind && <Status>{`Fant ${searchResult.length}!`}</Status>}
+          {!didntFind && <Status>{`Fant ${amount}!`}</Status>}
           {searchResult &&
             searchResult.map(element => (
               <Result key={element.id}>
