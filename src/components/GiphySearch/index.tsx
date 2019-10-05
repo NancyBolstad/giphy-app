@@ -16,7 +16,7 @@ const SearchSectionWrapper = styled.div`
   margin: 0 auto;
 `;
 
-const GeoSearchWrapper = styled.div`
+const SearchBlockWrapper = styled.div`
   display: flex;
   flex-direction: column;
   background-color: white;
@@ -121,14 +121,15 @@ export const GiphySearch: React.FunctionComponent<ISearchProps> = () => {
 
   return (
     <SearchSectionWrapper>
-      <GeoSearchWrapper>
+      <SearchBlockWrapper>
         <SearchFormWrapper>
           <form onSubmit={handleSubmit}>
             <input
               id="searchForm"
               className="searchInput"
               type="text"
-              placeholder="Search her"
+              aria-label="Search gif"
+              placeholder="Search gif"
               value={searchValue}
               onChange={(e: any) => {
                 setSearchValue(e.target.value);
@@ -139,7 +140,7 @@ export const GiphySearch: React.FunctionComponent<ISearchProps> = () => {
             </button>
           </form>
         </SearchFormWrapper>
-      </GeoSearchWrapper>
+      </SearchBlockWrapper>
       {!hasSearched && <TrendingSearch></TrendingSearch>}
       {hasSearched && (
         <ResultWrapper>

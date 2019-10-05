@@ -33,7 +33,7 @@ export const TrendingSearch: React.FunctionComponent<ITrendingSearchProps> = () 
     <Columned>
       {searchResult &&
         searchResult.map(element => (
-          <Gif src={element.images.original.url} alt={element.title}></Gif>
+          <Gif src={element.images.downsized_medium.url} alt={element.title}></Gif>
         ))}
     </Columned>
   );
