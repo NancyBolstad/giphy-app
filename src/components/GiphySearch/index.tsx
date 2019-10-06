@@ -1,9 +1,12 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import Columned from 'react-columned';
-import { GIPHY_API_KEY } from '../../util/constants';
-import { Root, GifObj } from '../../types/apiData';
+import { GifObj } from '../../types/apiData';
 import { TrendingSearch } from '../TrendingSearch';
+import searchImages from '../../util/searchImages';
+import { PAGE_SIZE } from '../../util/constants';
+import { searchIcon } from '../../util/icons';
+import { DumbButton } from '../Button';
 
 interface ISearchProps {}
 
@@ -18,7 +21,6 @@ const SearchSectionWrapper = styled.div`
 
 const SearchBlockWrapper = styled.div`
   display: flex;
-  flex-direction: column;
   background-color: white;
   background-color: black;
   padding-top: 3rem;
@@ -27,55 +29,88 @@ const SearchBlockWrapper = styled.div`
 
 const SearchFormWrapper = styled.div`
   margin: 0 auto;
+
   form {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    margin-bottom: 15px;
-  }
+    flex-direction: column;
+    flex-wrap: wrap;
+    margin: 0 auto;
+    width: 80vw;
 
-  button[type='submit'] {
-    border: 1px solid #aaa;
-    background-color: #aaa;
-    color: #fff;
-    padding: 0 12px;
-    height: 50px;
-    width:10vw;
+    @media screen and (min-width: 768px) {
+      flex-direction: row;
+      width: auto;
+    }
   }
 
   input[type='text'] {
-    border: 2px solid #aaa;
-    color: #333;
-    font-size: 14px;
-    height: 40px;
-    width: 40vw;
-	max-width: 100%;
+    border: none;
+    background: #e9e9e9;
+    white-space: nowrap;
+    padding: 0.35em 0.75em;
+    border: none;
+    font-size: 1.1em;
+    text-decoration: none;
+    line-height: normal;
+    height: 2rem;
+    flex-grow: 1;
+
+    @media screen and (min-width: 768px) {
+      flex-grow: 0;
+      width: 40vw;
     }
+  }
+
+  button[type='submit'] {
+    height: 2.35rem;
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-transform: capitalize;
+    background: red;
+    color: white;
+    border: none;
+    cursor: pointer;
+    flex-grow: 1;
+
+    svg {
+      height: 1.1rem;
+      width: 1.1rem;
+      font-weight: bold;
+      fill: white;
+      margin-right: 0.3rem;
+    }
+
+    @media screen and (min-width: 768px) {
+      flex-grow: 0;
+      width: 13rem;
+      height: 2.812rem;
+    }
+  }
+
+  input[type='text']:focus {
+    background: Thistle;
+    color: white;
+    transition: background 400ms ease-in-out;
+    outline: none;
   }
 
   button[type='submit']:focus {
     outline: none;
   }
-  button[type='submit']:active {
+  button[type='submit']:hover {
     opacity: 0.7;
   }
 `;
 
-const ResultWrapper = styled.ul`
+const ResultWrapper = styled.div`
   padding: 30px;
-  margin: 2px 0 0;
-  list-style: none;
-
-  li {
-    &:not(:last-child) {
-      margin-bottom: 50px;
-    }
-  }
 `;
 
-const Status = styled.li`
+const Status = styled.div`
   text-align: center;
+  margin-bottom: 3rem;
+  font-size: 2rem;
+  font-weight: bold;
 `;
 
 const Gif = styled.img`
@@ -87,33 +122,56 @@ const Gif = styled.img`
 export const GiphySearch: React.FunctionComponent<ISearchProps> = () => {
   const [searchValue, setSearchValue] = React.useState('');
   const [isLoading, setIsLoading] = React.useState(false);
-  const [hasSearched, setHasSearched] = React.useState(false);
   const [didntFind, setDidntFind] = React.useState(false);
+  const [total, setTotal] = React.useState(0);
+  const [hasSearched, setHasSearched] = React.useState(false);
   const [searchResult, setSearchResult] = React.useState<GifObj[]>([]);
-  const [amount, setAmount] = React.useState(0);
+  const [moreContent, setMoreContent] = React.useState(false);
+  const [paginationPosition, setPaginationPosition] = React.useState(0);
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
-    setSearchResult([]);
     setHasSearched(true);
+    setSearchResult([]);
     setIsLoading(true);
-    setDidntFind(false);
-    callApi(searchValue);
+
+    const finding = await searchImages(searchValue, paginationPosition);
+    const { data, pagination } = finding;
+
+    if (Array.isArray(data) && data.length > 0) {
+      setSearchResult(data);
+      setDidntFind(false);
+      setTotal(pagination.total_count);
+      setPaginationPosition(paginationPosition + PAGE_SIZE);
+    } else {
+      setDidntFind(true);
+      setSearchResult([]);
+    }
+
+    if (searchResult.length < pagination.total_count) {
+      setMoreContent(true);
+    }
+
+    setIsLoading(false);
   };
 
-  async function callApi(query: string) {
-    const url = `https://api.giphy.com/v1/gifs/search?api_key=${GIPHY_API_KEY}&q=${searchValue}&rating=G&lang=en
-    `;
-    const result: Root = await (await fetch(url)).json();
+  async function getMoreImages() {
+    const newImages = await searchImages(searchValue, paginationPosition);
+    const { data, pagination } = newImages;
+    console.log(pagination.count);
 
-    if (Array.isArray(result.data) && result.data.length > 0) {
-      console.log(1111111);
-      console.log(result.pagination.total_count);
-      setAmount(result.pagination.total_count);
-      setSearchResult(result.data);
+    if (newImages.data.length > 0) {
+      setHasSearched(true);
+      setSearchResult([...searchResult, ...data]);
+      setPaginationPosition(paginationPosition + PAGE_SIZE);
     } else {
-      setSearchResult([]);
       setDidntFind(true);
+      setMoreContent(false);
+      setSearchResult([]);
+    }
+
+    if (searchResult.length < pagination.total_count) {
+      setMoreContent(true);
     }
 
     setIsLoading(false);
@@ -129,14 +187,14 @@ export const GiphySearch: React.FunctionComponent<ISearchProps> = () => {
               className="searchInput"
               type="text"
               aria-label="Search gif"
-              placeholder="Search gif"
+              placeholder="Search for gifs"
               value={searchValue}
               onChange={(e: any) => {
                 setSearchValue(e.target.value);
               }}
             />
-            <button type="submit" aria-label="Søk etter gif">
-              Search
+            <button type="submit" aria-label="Search for gifs">
+              {searchIcon}Search
             </button>
           </form>
         </SearchFormWrapper>
@@ -144,17 +202,22 @@ export const GiphySearch: React.FunctionComponent<ISearchProps> = () => {
       {!hasSearched && <TrendingSearch></TrendingSearch>}
       {hasSearched && (
         <ResultWrapper>
-          {isLoading && <Status>Laster…</Status>}
-          {didntFind && <Status>{`Fant ingen ${searchValue}!`}</Status>}
-          {!didntFind && <Status>{`Found ${amount} gifs`}</Status>}
+          {isLoading && <Status>Louding…</Status>}
+          {didntFind && <Status>{`No results for ${searchValue}`}</Status>}
+          {!didntFind && <Status>{`Found ${total} gifts!`}</Status>}
           {searchResult && (
             <Columned>
               {searchResult.map(element => (
-                <Gif src={element.images.original.url} alt={element.title}></Gif>
+                <Gif src={element.images.downsized.url} alt={element.title}></Gif>
               ))}
             </Columned>
           )}
         </ResultWrapper>
+      )}
+      {moreContent && !didntFind && (
+        <DumbButton variant="loadMore" onClick={getMoreImages} title="Load more images">
+          Load More
+        </DumbButton>
       )}
     </SearchSectionWrapper>
   );
