@@ -98,6 +98,7 @@ export const GiphySearch: React.FunctionComponent<ISearchProps> = () => {
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
+    setSearchResult([]);
     setIsLoading(true);
     service.init(searchValue);
     getMoreImages();
