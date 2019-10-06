@@ -32,6 +32,10 @@ const Button = styled.a<Props>`
         border: none;
       }
     `};
+
+  &:focus {
+    outline: none;
+  }
 `;
 
 const DumbButton = Button.withComponent('button');
