@@ -6,6 +6,7 @@ import { TrendingSearch } from '../TrendingSearch';
 import searchImages from '../../util/searchImages';
 import { PAGE_SIZE } from '../../util/constants';
 import { searchIcon } from '../../util/icons';
+import { DumbButton } from '../Button';
 
 interface ISearchProps {}
 
@@ -118,25 +119,6 @@ const Gif = styled.img`
   margin: 0.3rem;
 `;
 
-const LoadMoreBtn = styled.button`
-  height: 3.35rem;
-  font-size: 1.5rem;
-  font-weight: bold;
-  text-transform: capitalize;
-  border: 2px solid white;
-  background-color: black;
-  color: white;
-  cursor: pointer;
-  width: 20rem;
-  margin: 1.2rem auto;
-
-  &:hover {
-    background: Thistle;
-    transition: background 400ms ease-in-out;
-    border: none;
-  }
-`;
-
 export const GiphySearch: React.FunctionComponent<ISearchProps> = () => {
   const [searchValue, setSearchValue] = React.useState('');
   const [isLoading, setIsLoading] = React.useState(false);
@@ -233,9 +215,9 @@ export const GiphySearch: React.FunctionComponent<ISearchProps> = () => {
         </ResultWrapper>
       )}
       {moreContent && !didntFind && (
-        <LoadMoreBtn onClick={getMoreImages} title="Load more images">
+        <DumbButton variant="loadMore" onClick={getMoreImages} title="Load more images">
           Load More
-        </LoadMoreBtn>
+        </DumbButton>
       )}
     </SearchSectionWrapper>
   );
