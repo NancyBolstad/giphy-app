@@ -71,7 +71,7 @@ const SearchFormWrapper = styled.div`
     font-size: 1.5rem;
     font-weight: bold;
     text-transform: capitalize;
-    background-image: linear-gradient(to bottom, #eb94d0, #2079b0);
+    background: linear-gradient(to right, #67b26b, #4ca2cb);
     color: white;
     border: none;
     cursor: pointer;
@@ -93,10 +93,9 @@ const SearchFormWrapper = styled.div`
   }
 
   input[type='text']:focus {
-    background: Thistle;
-    color: white;
-    transition: background 400ms ease-in-out;
+    background: white;
     outline: none;
+    border: 1px solid #67b26b;
   }
 
   button[type='submit']:focus {
