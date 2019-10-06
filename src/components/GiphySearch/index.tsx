@@ -1,10 +1,9 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import Columned from 'react-columned';
-import { PAGE_SIZE } from '../../util/constants';
 import { GifObj } from '../../types/apiData';
 import { TrendingSearch } from '../TrendingSearch';
-import ImageService from '../../util/apiFetch';
+import searchImages from '../../util/apiFetch';
 
 interface ISearchProps {}
 
@@ -92,36 +91,41 @@ export const GiphySearch: React.FunctionComponent<ISearchProps> = () => {
   const [hasSearched, setHasSearched] = React.useState(false);
   const [searchResult, setSearchResult] = React.useState<GifObj[]>([]);
   const [moreContent, setMoreContent] = React.useState(true);
-  const [isOnScrolled, setIsOnScrolled] = React.useState(false);
+  const [offSet, setOffSet] = React.useState(0);
 
-  const service = new ImageService();
-
-  const handleSubmit = (e: any) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
     setSearchResult([]);
     setIsLoading(true);
-    service.init(searchValue);
-    getMoreImages();
+    const finding = await searchImages(searchValue, offSet);
+    if (finding.data.length > 0) {
+      setHasSearched(true);
+      setSearchResult(finding.data);
+      const newOffset: number = finding.pagination.offset + 5;
+      setOffSet(newOffset);
+    } else {
+      setDidntFind(true);
+      setSearchResult([]);
+    }
+    if (finding.pagination.count * finding.pagination.offset >= finding.pagination.total_count) {
+      setMoreContent(false);
+    }
+
+    setIsLoading(false);
   };
 
   async function getMoreImages() {
-    if (isLoading || !moreContent) {
-      return;
-    }
-
-    let newImages = await service.get();
-    if (Array.isArray(newImages) && newImages.length > 0) {
-      setSearchResult(newImages);
+    const newImages = await searchImages(searchValue, offSet);
+    console.log(newImages);
+    if (newImages.data.length > 0) {
+      setHasSearched(true);
+      setSearchResult([...searchResult, ...newImages.data]);
+      setOffSet(offSet + 5);
     } else {
       setDidntFind(true);
-    }
-
-    //make sure we are not overflowing
-    if (searchResult.length + newImages.length > PAGE_SIZE) {
-      setMoreContent(false);
+      setSearchResult([]);
     }
     setIsLoading(false);
-    setHasSearched(true);
   }
 
   return (
@@ -159,6 +163,11 @@ export const GiphySearch: React.FunctionComponent<ISearchProps> = () => {
             </Columned>
           )}
         </ResultWrapper>
+      )}
+      {moreContent && (
+        <button onClick={getMoreImages} title="Click for more">
+          Load
+        </button>
       )}
     </SearchSectionWrapper>
   );

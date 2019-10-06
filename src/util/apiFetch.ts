@@ -1,48 +1,42 @@
-import { GIPHY_API_KEY, PAGE_SIZE } from './constants';
 import { Root } from '../types/apiData';
 
-/**
- * Handles fetching gifs from GIPHY
- */
-export default class ImageService {
-  query = '';
-  offset = 0;
+const SEARCH_ENDPOINT = 'https://api.giphy.com/v1/gifs/search';
+const TRENDING_ENDPOINT = 'https://api.giphy.com/v1/gifs/trending';
+const DEFAULT_LANG = 'en';
+const API_KEY = 'CdRKiCMbTnt9CkZTZ0lGukSczk6iT4Z6';
 
-  /**
-   * Initializes the service with a new query
-   *
-   * @param {string} query The new search query
-   */
-  init(query: string) {
-    this.query = query;
-    this.offset = 0;
+async function searchImages(
+  searchTerm: string,
+  count: number = 20,
+  offset: number = 0,
+  cache: { [key: string]: Root } | null = null,
+) {
+  let url = '';
+  if (searchTerm === '') {
+    // search trending
+    url = `${TRENDING_ENDPOINT}?`;
+  } else {
+    // search by keyword
+    url = `${SEARCH_ENDPOINT}?q=${searchTerm}&`;
+  }
+  url += `limit=${count}&offset=${offset}&rating=G&lang=${DEFAULT_LANG}&api_key=${API_KEY}`;
+
+  if (cache && cache[url]) {
+    return Promise.resolve(cache[url]);
   }
 
-  /**
-   * Fetches more images from GIPHY
-   *
-   * @returns { [{imageUrl:string, title:string, redirectUrl:string}] } Array of data for the new images
-   */
-  async get() {
-    let url =
-      `https://api.giphy.com/v1/gifs/search?api_key=${GIPHY_API_KEY}&` +
-      `q=${this.query}&limit=${PAGE_SIZE}&offset=${this.offset}&rating=G&lang=en`;
+  try {
+    const response = await fetch(url);
+    const data: Root = await response.json();
 
-    try {
-      let request = await fetch(url);
-      if (!request.ok) {
-        throw new Error("Can't fetch gits!");
-      }
-
-      let response: Root = await request.json();
-      console.log(response);
-
-      this.offset += response.pagination.count;
-
-      return response.data;
-    } catch (error) {
-      console.error(error);
-      return [];
+    if (cache) {
+      cache[url] = data;
     }
+
+    return data;
+  } catch (err) {
+    throw err;
   }
 }
+
+export default searchImages;
