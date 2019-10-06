@@ -1,7 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import Columned from 'react-columned';
-import { GIPHY_API_KEY } from '../../util/constants';
 import { Root, GifObj } from '../../types/apiData';
 import searchImages from '../../util/searchImages';
 
@@ -17,7 +16,7 @@ export const TrendingSearch: React.FunctionComponent<ITrendingSearchProps> = () 
   const [searchResult, setSearchResult] = React.useState<GifObj[]>([]);
 
   async function callApi() {
-    const trendingImages = await searchImages('', 200);
+    const trendingImages: Root = await searchImages('');
     const { data } = trendingImages;
 
     if (Array.isArray(data) && data.length > 0) {

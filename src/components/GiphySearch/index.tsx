@@ -4,6 +4,7 @@ import Columned from 'react-columned';
 import { GifObj, Pagination as PaginationObj } from '../../types/apiData';
 import { TrendingSearch } from '../TrendingSearch';
 import searchImages from '../../util/searchImages';
+import { PAGE_SIZE } from '../../util/constants';
 
 interface ISearchProps {}
 
@@ -96,6 +97,10 @@ export const GiphySearch: React.FunctionComponent<ISearchProps> = () => {
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
+
+    if (!e.target.value) {
+      alert('Cant be empty');
+    }
     setHasSearched(true);
     setSearchResult([]);
     setIsLoading(true);
@@ -108,7 +113,7 @@ export const GiphySearch: React.FunctionComponent<ISearchProps> = () => {
       setDidntFind(false);
       setTotal(pagination.total_count);
       checkPagination(pagination);
-      setPaginationPosition(paginationPosition + 30);
+      setPaginationPosition(paginationPosition + PAGE_SIZE);
     } else {
       setDidntFind(true);
       setSearchResult([]);
@@ -124,8 +129,8 @@ export const GiphySearch: React.FunctionComponent<ISearchProps> = () => {
 
     if (newImages.data.length > 0) {
       setHasSearched(true);
-      setSearchResult(data);
-      setPaginationPosition(paginationPosition + 30);
+      setSearchResult([...searchResult, ...data]);
+      setPaginationPosition(paginationPosition + PAGE_SIZE);
       checkPagination(pagination);
     } else {
       setDidntFind(true);
