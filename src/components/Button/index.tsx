@@ -27,7 +27,7 @@ const Button = styled.a<Props>`
       width: 20rem;
 
       &:hover {
-        background: Thistle;
+        background: #f6b93b;
         transition: background 400ms ease-in-out;
         border: none;
       }

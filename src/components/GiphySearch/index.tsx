@@ -71,7 +71,7 @@ const SearchFormWrapper = styled.div`
     font-size: 1.5rem;
     font-weight: bold;
     text-transform: capitalize;
-    background: red;
+    background-image: linear-gradient(to bottom, #eb94d0, #2079b0);
     color: white;
     border: none;
     cursor: pointer;
