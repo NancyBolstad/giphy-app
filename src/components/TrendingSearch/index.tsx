@@ -17,12 +17,11 @@ export const TrendingSearch: React.FunctionComponent<ITrendingSearchProps> = () 
   const [searchResult, setSearchResult] = React.useState<GifObj[]>([]);
 
   async function callApi() {
-    const url = `https://api.giphy.com/v1/gifs/trending?api_key=${GIPHY_API_KEY}&rating=G&lang=en
-    `;
-    const result: Root = await (await fetch(url)).json();
+    const trendingImages = await searchImages('', 200);
+    const { data } = trendingImages;
 
-    if (Array.isArray(result.data) && result.data.length > 0) {
-      setSearchResult(result.data);
+    if (Array.isArray(data) && data.length > 0) {
+      setSearchResult(data);
     } else {
       setSearchResult([]);
     }
@@ -34,7 +33,7 @@ export const TrendingSearch: React.FunctionComponent<ITrendingSearchProps> = () 
     <Columned>
       {searchResult &&
         searchResult.map(element => (
-          <Gif src={element.images.downsized_medium.url} alt={element.title}></Gif>
+          <Gif src={element.images.downsized.url} alt={element.title}></Gif>
         ))}
     </Columned>
   );
