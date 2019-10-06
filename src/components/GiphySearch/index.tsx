@@ -17,6 +17,11 @@ const SearchSectionWrapper = styled.div`
   flex-direction: column;
   width: 75vw;
   margin: 0 auto;
+
+  h1 {
+    margin: 1.8rem auto;
+    font-size: 2.2rem;
+  }
 `;
 
 const SearchBlockWrapper = styled.div`
@@ -179,6 +184,7 @@ export const GiphySearch: React.FunctionComponent<ISearchProps> = () => {
 
   return (
     <SearchSectionWrapper>
+      <h1>Giphy Search</h1>
       <SearchBlockWrapper>
         <SearchFormWrapper>
           <form onSubmit={handleSubmit}>
