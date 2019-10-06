@@ -6,7 +6,7 @@ async function searchImages(searchTerm: string, offset: number = 0) {
   if (searchTerm === '') {
     url = `${TRENDING_ENDPOINT}?`;
   } else {
-    url = `${SEARCH_ENDPOINT}?q=${searchTerm}&`;
+    url = `${SEARCH_ENDPOINT}?q=${encodeURIComponent(searchTerm)}&`;
   }
   url += `limit=${PAGE_SIZE}&offset=${offset}&rating=G&lang=en&api_key=${GIPHY_API_KEY}`;
 

@@ -37,45 +37,39 @@ const SearchFormWrapper = styled.div`
   }
 
   button[type='submit'] {
-    border: 1px solid #aaa;
     background-color: #aaa;
     color: #fff;
-    padding: 0 12px;
-    height: 50px;
+    height: 40px;
     width:10vw;
   }
 
   input[type='text'] {
-    border: 2px solid #aaa;
     color: #333;
     font-size: 14px;
     height: 40px;
     width: 40vw;
-	max-width: 100%;
+	  max-width: 100%;
     }
+  }
+
+  input[type='text']:focus{
+    outline: none;
+    border:2px solid yellow;
   }
 
   button[type='submit']:focus {
     outline: none;
   }
-  button[type='submit']:active {
+  button[type='submit']:hover {
     opacity: 0.7;
   }
 `;
 
-const ResultWrapper = styled.ul`
+const ResultWrapper = styled.div`
   padding: 30px;
-  margin: 2px 0 0;
-  list-style: none;
-
-  li {
-    &:not(:last-child) {
-      margin-bottom: 50px;
-    }
-  }
 `;
 
-const Status = styled.li`
+const Status = styled.div`
   text-align: center;
 `;
 
@@ -97,10 +91,6 @@ export const GiphySearch: React.FunctionComponent<ISearchProps> = () => {
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-
-    if (!e.target.value) {
-      alert('Cant be empty');
-    }
     setHasSearched(true);
     setSearchResult([]);
     setIsLoading(true);
@@ -112,12 +102,17 @@ export const GiphySearch: React.FunctionComponent<ISearchProps> = () => {
       setSearchResult(data);
       setDidntFind(false);
       setTotal(pagination.total_count);
-      checkPagination(pagination);
       setPaginationPosition(paginationPosition + PAGE_SIZE);
     } else {
       setDidntFind(true);
       setSearchResult([]);
     }
+
+    if (searchResult.length < pagination.total_count) {
+      setMoreContent(true);
+    }
+
+    window.location.assign(`search=${encodeURIComponent(searchValue)}`);
 
     setIsLoading(false);
   };
@@ -131,20 +126,17 @@ export const GiphySearch: React.FunctionComponent<ISearchProps> = () => {
       setHasSearched(true);
       setSearchResult([...searchResult, ...data]);
       setPaginationPosition(paginationPosition + PAGE_SIZE);
-      checkPagination(pagination);
     } else {
       setDidntFind(true);
       setMoreContent(false);
       setSearchResult([]);
     }
-    setIsLoading(false);
-  }
 
-  function checkPagination(paginationObj: PaginationObj) {
-    const { count, offset, total_count } = paginationObj;
-    if (count * offset < total_count) {
+    if (searchResult.length < pagination.total_count) {
       setMoreContent(true);
     }
+
+    setIsLoading(false);
   }
 
   return (
@@ -172,9 +164,9 @@ export const GiphySearch: React.FunctionComponent<ISearchProps> = () => {
       {!hasSearched && <TrendingSearch></TrendingSearch>}
       {hasSearched && (
         <ResultWrapper>
-          {isLoading && <Status>Laster…</Status>}
-          {didntFind && <Status>{`Fant ingen ${searchValue}!`}</Status>}
-          {!didntFind && <Status>{`Fant ${total} gifts!`}</Status>}
+          {isLoading && <Status>Louding…</Status>}
+          {didntFind && <Status>{`No results for ${searchValue}`}</Status>}
+          {!didntFind && <Status>{`Found ${total} gifts!`}</Status>}
           {searchResult && (
             <Columned>
               {searchResult.map(element => (
@@ -185,7 +177,7 @@ export const GiphySearch: React.FunctionComponent<ISearchProps> = () => {
         </ResultWrapper>
       )}
       {moreContent && !didntFind && (
-        <button onClick={getMoreImages} title="Click for more">
+        <button onClick={getMoreImages} title="Load more images">
           Load
         </button>
       )}
