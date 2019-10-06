@@ -1,9 +1,9 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import Columned from 'react-columned';
-import { GifObj } from '../../types/apiData';
+import { GifObj, Pagination as PaginationObj } from '../../types/apiData';
 import { TrendingSearch } from '../TrendingSearch';
-import searchImages from '../../util/apiFetch';
+import searchImages from '../../util/searchImages';
 
 interface ISearchProps {}
 
@@ -88,44 +88,58 @@ export const GiphySearch: React.FunctionComponent<ISearchProps> = () => {
   const [searchValue, setSearchValue] = React.useState('');
   const [isLoading, setIsLoading] = React.useState(false);
   const [didntFind, setDidntFind] = React.useState(false);
+  const [total, setTotal] = React.useState(0);
   const [hasSearched, setHasSearched] = React.useState(false);
   const [searchResult, setSearchResult] = React.useState<GifObj[]>([]);
-  const [moreContent, setMoreContent] = React.useState(true);
-  const [offSet, setOffSet] = React.useState(0);
+  const [moreContent, setMoreContent] = React.useState(false);
+  const [paginationPosition, setPaginationPosition] = React.useState(0);
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
+    setHasSearched(true);
     setSearchResult([]);
     setIsLoading(true);
-    const finding = await searchImages(searchValue, offSet);
-    if (finding.data.length > 0) {
-      setHasSearched(true);
-      setSearchResult(finding.data);
-      const newOffset: number = finding.pagination.offset + 5;
-      setOffSet(newOffset);
+
+    const finding = await searchImages(searchValue, paginationPosition);
+    const { data, pagination } = finding;
+
+    if (Array.isArray(data) && data.length > 0) {
+      setSearchResult(data);
+      setDidntFind(false);
+      setTotal(pagination.total_count);
+      checkPagination(pagination);
+      setPaginationPosition(paginationPosition + 30);
     } else {
       setDidntFind(true);
       setSearchResult([]);
-    }
-    if (finding.pagination.count * finding.pagination.offset >= finding.pagination.total_count) {
-      setMoreContent(false);
     }
 
     setIsLoading(false);
   };
 
   async function getMoreImages() {
-    const newImages = await searchImages(searchValue, offSet);
-    console.log(newImages);
+    const newImages = await searchImages(searchValue, paginationPosition);
+    const { data, pagination } = newImages;
+    console.log(pagination.count);
+
     if (newImages.data.length > 0) {
       setHasSearched(true);
-      setSearchResult([...searchResult, ...newImages.data]);
-      setOffSet(offSet + 5);
+      setSearchResult(data);
+      setPaginationPosition(paginationPosition + 30);
+      checkPagination(pagination);
     } else {
       setDidntFind(true);
+      setMoreContent(false);
       setSearchResult([]);
     }
     setIsLoading(false);
+  }
+
+  function checkPagination(paginationObj: PaginationObj) {
+    const { count, offset, total_count } = paginationObj;
+    if (count * offset < total_count) {
+      setMoreContent(true);
+    }
   }
 
   return (
@@ -155,6 +169,7 @@ export const GiphySearch: React.FunctionComponent<ISearchProps> = () => {
         <ResultWrapper>
           {isLoading && <Status>Laster…</Status>}
           {didntFind && <Status>{`Fant ingen ${searchValue}!`}</Status>}
+          {!didntFind && <Status>{`Fant ${total} gifts!`}</Status>}
           {searchResult && (
             <Columned>
               {searchResult.map(element => (
@@ -164,7 +179,7 @@ export const GiphySearch: React.FunctionComponent<ISearchProps> = () => {
           )}
         </ResultWrapper>
       )}
-      {moreContent && (
+      {moreContent && !didntFind && (
         <button onClick={getMoreImages} title="Click for more">
           Load
         </button>

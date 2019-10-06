@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import Columned from 'react-columned';
 import { GIPHY_API_KEY } from '../../util/constants';
 import { Root, GifObj } from '../../types/apiData';
+import searchImages from '../../util/searchImages';
 
 interface ITrendingSearchProps {}
 
