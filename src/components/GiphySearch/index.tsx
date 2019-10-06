@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import Columned from 'react-columned';
-import { GifObj, Pagination as PaginationObj } from '../../types/apiData';
+import { GifObj } from '../../types/apiData';
 import { TrendingSearch } from '../TrendingSearch';
 import searchImages from '../../util/searchImages';
 import { PAGE_SIZE } from '../../util/constants';
