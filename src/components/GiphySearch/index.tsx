@@ -1,9 +1,10 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import Columned from 'react-columned';
-import { GIPHY_API_KEY } from '../../util/constants';
-import { Root, GifObj } from '../../types/apiData';
+import { PAGE_SIZE } from '../../util/constants';
+import { GifObj } from '../../types/apiData';
 import { TrendingSearch } from '../TrendingSearch';
+import ImageService from '../../util/apiFetch';
 
 interface ISearchProps {}
 
@@ -87,36 +88,39 @@ const Gif = styled.img`
 export const GiphySearch: React.FunctionComponent<ISearchProps> = () => {
   const [searchValue, setSearchValue] = React.useState('');
   const [isLoading, setIsLoading] = React.useState(false);
-  const [hasSearched, setHasSearched] = React.useState(false);
   const [didntFind, setDidntFind] = React.useState(false);
+  const [hasSearched, setHasSearched] = React.useState(false);
   const [searchResult, setSearchResult] = React.useState<GifObj[]>([]);
-  const [amount, setAmount] = React.useState(0);
+  const [moreContent, setMoreContent] = React.useState(true);
+  const [isOnScrolled, setIsOnScrolled] = React.useState(false);
+
+  const service = new ImageService();
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    setSearchResult([]);
-    setHasSearched(true);
     setIsLoading(true);
-    setDidntFind(false);
-    callApi(searchValue);
+    service.init(searchValue);
+    getMoreImages();
   };
 
-  async function callApi(query: string) {
-    const url = `https://api.giphy.com/v1/gifs/search?api_key=${GIPHY_API_KEY}&q=${searchValue}&rating=G&lang=en
-    `;
-    const result: Root = await (await fetch(url)).json();
+  async function getMoreImages() {
+    if (isLoading || !moreContent) {
+      return;
+    }
 
-    if (Array.isArray(result.data) && result.data.length > 0) {
-      console.log(1111111);
-      console.log(result.pagination.total_count);
-      setAmount(result.pagination.total_count);
-      setSearchResult(result.data);
+    let newImages = await service.get();
+    if (Array.isArray(newImages) && newImages.length > 0) {
+      setSearchResult(newImages);
     } else {
-      setSearchResult([]);
       setDidntFind(true);
     }
 
+    //make sure we are not overflowing
+    if (searchResult.length + newImages.length > PAGE_SIZE) {
+      setMoreContent(false);
+    }
     setIsLoading(false);
+    setHasSearched(true);
   }
 
   return (
@@ -146,11 +150,10 @@ export const GiphySearch: React.FunctionComponent<ISearchProps> = () => {
         <ResultWrapper>
           {isLoading && <Status>Laster…</Status>}
           {didntFind && <Status>{`Fant ingen ${searchValue}!`}</Status>}
-          {!didntFind && <Status>{`Found ${amount} gifs`}</Status>}
           {searchResult && (
             <Columned>
               {searchResult.map(element => (
-                <Gif src={element.images.original.url} alt={element.title}></Gif>
+                <Gif src={element.images.downsized.url} alt={element.title}></Gif>
               ))}
             </Columned>
           )}
