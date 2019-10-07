@@ -1,6 +1,6 @@
 # Gif Search App
 
-A simple gif search React app made with Giphy API [GIPHY API](https://developers.giphy.com/docs/api).
+A simple gif search React app made with [GIPHY API](https://developers.giphy.com/docs/api).
 
 ### Technology Stack
 
