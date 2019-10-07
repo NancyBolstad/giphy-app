@@ -16,7 +16,7 @@ This app is deployed on the following platforms:
 - Heroku: [https://giphy-react-app.herokuapp.com/](https://giphy-react-app.herokuapp.com/)
 - Github Page: [https://nancybolstad.github.io/giphy-app/](https://nancybolstad.github.io/giphy-app/)
 
-View design/prototype: (https://github.com/NancyBolstad/giphy-app/blob/master/doc/giphy-design.pdf)
+View design/prototype: https://github.com/NancyBolstad/giphy-app/blob/master/doc/giphy-design.pdf
 
 ### Running locally in development mode
 
