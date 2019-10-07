@@ -35,11 +35,11 @@ yarn storybook
 
 ## Features
 
-- Show trending gifs if you haven't searched for anything.
+- Async fetching
 - Display search results in a Masonry-like grid layout/photo gallery
 - Support infinite loading: keep loading more images when user clicks the "Load more" button
-- Async fetching
-- Mobile-first responsive design.
+- Show trending gifs in the index page
+- Responsive design. Mobile-first.
 - Meet the Web accessibility requirements.
 
 ## TODO:
