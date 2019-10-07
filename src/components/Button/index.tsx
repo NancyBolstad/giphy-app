@@ -9,7 +9,7 @@ const Button = styled.a<Props>`
   display: table-cell;
   text-decoration: none;
   cursor: pointer;
-  color: white;
+  color: #ffffff;
   text-align: center;
   vertical-align: middle;
   text-transform: capitalize;
@@ -21,15 +21,21 @@ const Button = styled.a<Props>`
     css`
       height: 3.35rem;
       font-size: 1.5rem;
-      border: 2px solid white;
+      border: 2px solid #ffffff;
       background-color: black;
-      color: white;
-      width: 20rem;
+      color: #ffffff;
+      width: 12rem;
 
       &:hover {
-        background: #67b26b;
+        background: #09ebaf;
         transition: background 400ms ease-in-out;
         border: none;
+        color: black;
+      }
+
+      &:active {
+        opacity: 0.7;
+        box-shadow: none;
       }
     `};
 
