@@ -104,7 +104,7 @@ const Status = styled.div`
   margin-bottom: 3rem;
   font-size: 1.375rem;
   font-weight: bold;
-  color: #ffc53a;
+  color: #ffd635;
   animation: pop-in 0.6s ease-out forwards;
 
   @keyframes pop-in {
