@@ -5,6 +5,7 @@ A simple gif search React app made with [GIPHY API](https://developers.giphy.com
 ### Technology Stack
 
 - Typescript
+- React
 - Styled components
 - Storybook
 
