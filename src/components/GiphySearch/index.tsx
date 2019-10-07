@@ -1,9 +1,9 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import Columned from 'react-columned';
+import TrendingSearch from '../TrendingSearch';
 import { GifObj } from '../../types/apiData';
-import { TrendingSearch } from '../TrendingSearch';
-import searchImages from '../../util/searchImages';
+import giphyService from '../../util/giphyService';
 import { PAGE_SIZE } from '../../util/constants';
 import { searchIcon } from '../../util/icons';
 import { DumbButton } from '../Button';
@@ -15,21 +15,19 @@ const SearchSectionWrapper = styled.div`
   background-color: black;
   color: white;
   flex-direction: column;
-  width: 75vw;
+  width: 85vw;
   margin: 0 auto;
 
   h1 {
-    margin: 1.8rem auto;
+    margin: 2rem auto;
     font-size: 2.2rem;
   }
 `;
 
 const SearchBlockWrapper = styled.div`
-  display: flex;
-  background-color: white;
-  background-color: black;
-  padding-top: 3rem;
   padding-bottom: 3rem;
+  width: 80vw;
+  margin: 0 auto;
 `;
 
 const SearchFormWrapper = styled.div`
@@ -37,7 +35,7 @@ const SearchFormWrapper = styled.div`
 
   form {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     flex-wrap: wrap;
     margin: 0 auto;
     width: 80vw;
@@ -52,50 +50,34 @@ const SearchFormWrapper = styled.div`
     border: none;
     background: #e9e9e9;
     white-space: nowrap;
-    padding: 0.35em 0.75em;
+    padding: 0.55rem 0.75rem;
     border: none;
     font-size: 1.1em;
     text-decoration: none;
     line-height: normal;
     height: 2rem;
     flex-grow: 1;
-
-    @media screen and (min-width: 768px) {
-      flex-grow: 0;
-      width: 40vw;
-    }
+    width: 40vw;
   }
 
   button[type='submit'] {
-    height: 2.35rem;
-    font-size: 1.5rem;
-    font-weight: bold;
-    text-transform: capitalize;
-    background: linear-gradient(to right, #67b26b, #4ca2cb);
-    color: white;
+    background-color: #09ebaf;
+    color: black;
     border: none;
     cursor: pointer;
     flex-grow: 1;
+    width: 10vw;
 
     svg {
       height: 1.1rem;
       width: 1.1rem;
-      font-weight: bold;
       fill: white;
-      margin-right: 0.3rem;
-    }
-
-    @media screen and (min-width: 768px) {
-      flex-grow: 0;
-      width: 13rem;
-      height: 2.812rem;
     }
   }
 
   input[type='text']:focus {
     background: white;
     outline: none;
-    border: 1px solid #67b26b;
   }
 
   button[type='submit']:focus {
@@ -133,17 +115,25 @@ export const GiphySearch: React.FunctionComponent<ISearchProps> = () => {
   const [moreContent, setMoreContent] = React.useState(false);
   const [paginationPosition, setPaginationPosition] = React.useState(0);
 
-  const handleSubmit = async (e: any) => {
+  const handleSearchSubmit = async (e: any) => {
     e.preventDefault();
     setHasSearched(true);
     setSearchResult([]);
     setIsLoading(true);
+    searchImages();
+  };
 
-    const finding = await searchImages(searchValue, paginationPosition);
+  async function searchImages() {
+    const finding = await giphyService({
+      searchEndpoint: 'search',
+      searchTerm: searchValue,
+      offset: paginationPosition,
+    });
     const { data, pagination } = finding;
 
     if (Array.isArray(data) && data.length > 0) {
       setSearchResult(data);
+      setHasSearched(true);
       setDidntFind(false);
       setTotal(pagination.total_count);
       setPaginationPosition(paginationPosition + PAGE_SIZE);
@@ -157,12 +147,15 @@ export const GiphySearch: React.FunctionComponent<ISearchProps> = () => {
     }
 
     setIsLoading(false);
-  };
+  }
 
   async function getMoreImages() {
-    const newImages = await searchImages(searchValue, paginationPosition);
+    const newImages = await giphyService({
+      searchEndpoint: 'search',
+      searchTerm: searchValue,
+      offset: paginationPosition,
+    });
     const { data, pagination } = newImages;
-    console.log(pagination.count);
 
     if (newImages.data.length > 0) {
       setHasSearched(true);
@@ -186,7 +179,7 @@ export const GiphySearch: React.FunctionComponent<ISearchProps> = () => {
       <h1>Giphy Search</h1>
       <SearchBlockWrapper>
         <SearchFormWrapper>
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSearchSubmit}>
             <input
               id="searchForm"
               className="searchInput"
@@ -199,7 +192,7 @@ export const GiphySearch: React.FunctionComponent<ISearchProps> = () => {
               }}
             />
             <button type="submit" aria-label="Search for gifs">
-              {searchIcon}Search
+              {searchIcon}
             </button>
           </form>
         </SearchFormWrapper>
