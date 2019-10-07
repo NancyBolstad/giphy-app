@@ -18,7 +18,7 @@ This app deployed on the following platform:
 
 ### Running locally in development mode
 
-- Ensure you have yarn installed
+Ensure you have yarn installed
 
 ```bash
 yarn install
