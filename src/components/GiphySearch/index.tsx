@@ -12,8 +12,8 @@ interface ISearchProps {}
 
 const SearchSectionWrapper = styled.div`
   display: flex;
-  background-color: black;
-  color: white;
+  background-color: #000000;
+  color: #ffffff;
   flex-direction: column;
   width: 85vw;
   margin: 0 auto;
@@ -37,7 +37,7 @@ const SearchFormWrapper = styled.div`
     flex-wrap: wrap;
     margin: 0 auto;
     width: 80vw;
-    box-shadow: 10px 10px 5px 0px blue;
+    box-shadow: 10px 10px 5px 0px #0002f1;
 
     @media screen and (min-width: 768px) {
       width: 60vw;
@@ -82,7 +82,7 @@ const SearchFormWrapper = styled.div`
   }
 
   input[type='text']:focus {
-    background: white;
+    background: #ffffff;
     outline: none;
     border: 2px solid #09ebaf;
   }
@@ -103,7 +103,20 @@ const Status = styled.div`
   text-align: center;
   margin-bottom: 3rem;
   font-size: 1.375rem;
+  font-weight: bold;
   color: #ffc53a;
+  animation: pop-in 0.6s ease-out forwards;
+
+  @keyframes pop-in {
+    0% {
+      opacity: 0;
+      transform: translateY(-4rem) scale(0.8);
+    }
+    100% {
+      opacity: 1;
+      transform: none;
+    }
+  }
 `;
 
 const Gif = styled.img`
@@ -195,6 +208,7 @@ export const GiphySearch: React.FunctionComponent<ISearchProps> = () => {
               placeholder="Search for gifs"
               value={searchValue}
               onChange={(e: any) => {
+                e.preventDefault();
                 setSearchValue(e.target.value);
               }}
             />
@@ -207,7 +221,7 @@ export const GiphySearch: React.FunctionComponent<ISearchProps> = () => {
       {!hasSearched && <TrendingSearch></TrendingSearch>}
       {hasSearched && (
         <ResultWrapper>
-          {isLoading && <Status>Louding…</Status>}
+          {isLoading && <Status>Loading…</Status>}
           {didntFind && <Status>{`No results for ${searchValue}`}</Status>}
           {!didntFind && <Status>{`Found ${total} gifts!`}</Status>}
           {searchResult && (
