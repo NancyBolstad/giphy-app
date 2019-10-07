@@ -46,4 +46,4 @@ yarn storybook
 - [ ] Unit Test
 - [ ] Dark/light mode toggle
 - [ ] Progressive image loading
-- [ ] Added routing: Keep the URL in sync with the search input.
+- [ ] Add routing: Keep the URL in sync with the search input.
