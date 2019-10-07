@@ -41,8 +41,11 @@ const SearchFormWrapper = styled.div`
     width: 80vw;
 
     @media screen and (min-width: 768px) {
-      flex-direction: row;
-      width: auto;
+      width: 60vw;
+    }
+
+    @media screen and (min-width: 1080px) {
+      width: 52vw;
     }
   }
 
@@ -69,9 +72,13 @@ const SearchFormWrapper = styled.div`
     width: 10vw;
 
     svg {
-      height: 1.1rem;
-      width: 1.1rem;
-      fill: white;
+      height: 1.5rem;
+      width: 1.5rem;
+      fill: black;
+    }
+
+    @media screen and (min-width: 1080px) {
+      width: 3rem;
     }
   }
 
