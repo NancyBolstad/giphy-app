@@ -5,6 +5,7 @@
   "repository": "git@github.com/NancyBolstad/giphy-app.git",
   "author": "Nancy Bolstad <litchacha@gmail.com>",
   "license": "MIT",
+  "homepage": "https://nancybolstad.github.io/giphy-app/",
   "dependencies": {
     "@storybook/react": "^5.2.1",
     "@types/jest": "24.0.18",
