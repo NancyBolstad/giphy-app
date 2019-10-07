@@ -24,12 +24,18 @@ const Button = styled.a<Props>`
       border: 2px solid white;
       background-color: black;
       color: white;
-      width: 20rem;
+      width: 12rem;
 
       &:hover {
-        background: #67b26b;
+        background: #09ebaf;
         transition: background 400ms ease-in-out;
         border: none;
+        color: black;
+      }
+
+      &:active {
+        opacity: 0.7;
+        box-shadow: none;
       }
     `};
 

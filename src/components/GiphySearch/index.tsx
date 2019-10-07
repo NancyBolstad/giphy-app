@@ -31,14 +31,13 @@ const SearchBlockWrapper = styled.div`
 `;
 
 const SearchFormWrapper = styled.div`
-  margin: 0 auto;
-
   form {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     margin: 0 auto;
     width: 80vw;
+    box-shadow: 10px 10px 5px 0px blue;
 
     @media screen and (min-width: 768px) {
       width: 60vw;
@@ -85,6 +84,7 @@ const SearchFormWrapper = styled.div`
   input[type='text']:focus {
     background: white;
     outline: none;
+    border: 2px solid #09ebaf;
   }
 
   button[type='submit']:focus {
@@ -102,8 +102,8 @@ const ResultWrapper = styled.div`
 const Status = styled.div`
   text-align: center;
   margin-bottom: 3rem;
-  font-size: 2rem;
-  font-weight: bold;
+  font-size: 1.375rem;
+  color: #ffc53a;
 `;
 
 const Gif = styled.img`
